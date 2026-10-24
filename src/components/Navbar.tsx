@@ -1,0 +1,185 @@
+import React, { useState } from 'react';
+import { useLanguage } from '../i18n/LanguageContext';
+import { LanguageSelector } from './LanguageSelector';
+import { 
+  Sprout, 
+  ScanLine, 
+  BookOpen, 
+  CloudSun, 
+  History, 
+  Info, 
+  PhoneCall, 
+  Menu, 
+  X,
+  Sparkles
+} from 'lucide-react';
+
+interface NavbarProps {
+  currentTab: string;
+  setCurrentTab: (tab: string) => void;
+}
+
+export const Navbar: React.FC<NavbarProps> = ({ currentTab, setCurrentTab }) => {
+  const { t } = useLanguage();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const navLinks = [
+    { id: 'home', label: t.nav.home, icon: Sprout },
+    { id: 'detect', label: t.nav.detect, icon: ScanLine, highlight: true },
+    { id: 'guide', label: t.nav.guide, icon: BookOpen },
+    { id: 'weather', label: t.nav.weather, icon: CloudSun },
+    { id: 'history', label: t.nav.history, icon: History },
+    { id: 'about', label: t.nav.about, icon: Info },
+    { id: 'contact', label: t.nav.contact, icon: PhoneCall },
+  ];
+
+  const handleNavClick = (id: string) => {
+    setCurrentTab(id);
+    setMobileMenuOpen(false);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  return (
+    <header className="sticky top-0 z-40 w-full border-b border-forest-100 bg-cream/95 backdrop-blur-md transition-all">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex h-16 sm:h-20 items-center justify-between">
+          
+          {/* Brand Logo & Tagline */}
+          <button 
+            type="button" 
+            onClick={() => handleNavClick('home')}
+            className="flex items-center gap-2.5 sm:gap-3 text-left group focus:outline-none"
+          >
+            <div className="relative flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-2xl bg-forest-900 text-white shadow-soft transition-transform group-hover:scale-105">
+              <Sprout className="h-6 w-6 text-emerald-400 group-hover:rotate-12 transition-transform duration-300" />
+              <span className="absolute -top-1 -right-1 flex h-3 w-3">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-harvest-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-harvest"></span>
+              </span>
+            </div>
+            <div>
+              <div className="flex items-center gap-1.5">
+                <span className="font-bold text-lg sm:text-xl tracking-tight text-forest-950">
+                  CropCare <span className="text-forest-600 font-extrabold">AI</span>
+                </span>
+                <span className="hidden sm:inline-flex items-center rounded-full bg-harvest-100 px-2 py-0.5 text-[10px] font-semibold text-harvest-800 border border-harvest-200">
+                  <Sparkles className="w-2.5 h-2.5 mr-0.5 text-harvest-600" /> Free for Farmers
+                </span>
+              </div>
+              <p className="text-[11px] sm:text-xs text-stone-600 font-medium tracking-tight -mt-0.5 hidden xs:block">
+                {t.tagline}
+              </p>
+            </div>
+          </button>
+
+          {/* Desktop Nav Links */}
+          <nav className="hidden lg:flex items-center gap-1 xl:gap-2">
+            {navLinks.map((item) => {
+              const Icon = item.icon;
+              const isActive = currentTab === item.id;
+              
+              if (item.highlight) {
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => handleNavClick(item.id)}
+                    className={`inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-xs xl:text-sm font-semibold transition shadow-sm ${
+                      isActive 
+                        ? 'bg-harvest-500 text-stone-900 ring-2 ring-harvest-400' 
+                        : 'bg-harvest-400 text-stone-900 hover:bg-harvest-500 hover:shadow'
+                    }`}
+                  >
+                    <Icon className="h-4 w-4" />
+                    <span>{item.label}</span>
+                  </button>
+                );
+              }
+
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => handleNavClick(item.id)}
+                  className={`inline-flex items-center gap-1.5 rounded-full px-3 xl:px-3.5 py-1.5 text-xs xl:text-sm font-medium transition ${
+                    isActive
+                      ? 'bg-forest-100 text-forest-950 font-semibold'
+                      : 'text-stone-700 hover:bg-forest-50 hover:text-forest-900'
+                  }`}
+                >
+                  <Icon className={`h-4 w-4 ${isActive ? 'text-forest-700' : 'text-stone-500'}`} />
+                  <span>{item.label}</span>
+                </button>
+              );
+            })}
+          </nav>
+
+          {/* Right side controls: Language switcher & Mobile Menu toggle */}
+          <div className="flex items-center gap-2 sm:gap-3">
+            <LanguageSelector />
+
+            {/* Mobile Detect Button shortcut */}
+            <button
+              onClick={() => handleNavClick('detect')}
+              className="lg:hidden inline-flex items-center gap-1 rounded-full bg-harvest-400 px-3 py-1.5 text-xs font-semibold text-stone-900 shadow-sm hover:bg-harvest-500"
+            >
+              <ScanLine className="h-3.5 w-3.5" />
+              <span>{t.nav.detect}</span>
+            </button>
+
+            {/* Mobile hamburger button */}
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="lg:hidden inline-flex items-center justify-center rounded-xl p-2 text-forest-900 hover:bg-forest-100 focus:outline-none focus:ring-2 focus:ring-forest-500"
+              aria-label="Toggle navigation menu"
+            >
+              {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile Drawer */}
+      {mobileMenuOpen && (
+        <div className="lg:hidden border-b border-forest-100 bg-white/95 px-4 pt-3 pb-6 shadow-lifted animate-in slide-in-from-top-4 duration-200">
+          <div className="flex flex-col gap-1.5">
+            {navLinks.map((item) => {
+              const Icon = item.icon;
+              const isActive = currentTab === item.id;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => handleNavClick(item.id)}
+                  className={`flex items-center justify-between rounded-2xl px-4 py-3 text-sm font-medium transition ${
+                    isActive
+                      ? 'bg-forest-900 text-white font-semibold shadow-sm'
+                      : item.highlight
+                      ? 'bg-harvest-100 text-harvest-950 font-semibold'
+                      : 'text-stone-700 hover:bg-forest-50 hover:text-forest-900'
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <Icon className={`h-5 w-5 ${isActive ? 'text-emerald-400' : 'text-forest-700'}`} />
+                    <span>{item.label}</span>
+                  </div>
+                  {item.highlight && !isActive && (
+                    <span className="rounded-full bg-harvest-400 px-2 py-0.5 text-[10px] font-bold text-stone-900 uppercase">
+                      AI Scan
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Quick Helpline inside Mobile Drawer */}
+          <div className="mt-4 pt-4 border-t border-stone-100 flex items-center justify-between px-2 text-xs text-stone-600">
+            <span className="flex items-center gap-1.5">
+              <PhoneCall className="w-3.5 h-3.5 text-forest-700" /> Kisan Helpline: <strong>1800-180-1551</strong>
+            </span>
+            <span className="text-[11px] text-forest-700 font-semibold">Toll-Free 24x7</span>
+          </div>
+        </div>
+      )}
+    </header>
+  );
+};
