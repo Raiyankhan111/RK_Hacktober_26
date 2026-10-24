@@ -1,5 +1,14 @@
 # CropCare AI — Smart Farming, Healthier Crops 🌾
 
+[![Deployed with Vercel](https://img.shields.io/badge/Deployed%20with-Vercel-black?style=for-the-badge&logo=vercel)](https://ay-hacktober-26.vercel.app)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-ay--hacktober--26.vercel.app-14532d?style=for-the-badge&logo=google-chrome)](https://ay-hacktober-26.vercel.app)
+
+> ### 🌐 **Live Website Link:**  
+> # 👉 **[https://ay-hacktober-26.vercel.app](https://ay-hacktober-26.vercel.app)**
+> *(Alternative mirror: [GitHub Pages](https://yeolearnav34.github.io/AY_Hacktober_26/))*
+
+---
+
 An AI-powered agricultural diagnostic web application designed specifically for Indian farmers and agronomists. **CropCare AI** identifies crop foliar diseases from live camera feeds or photo uploads, delivering instant, actionable treatment plans, weather-driven fungal forecasts, and verified Integrated Pest Management (IPM) guidelines in **English**, **हिन्दी (Hindi)**, and **मराठी (Marathi)**.
 
 ---
